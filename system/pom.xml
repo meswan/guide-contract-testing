@@ -35,6 +35,11 @@
             <version>4.1.7</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
             <version>3.3.6</version>
@@ -66,6 +71,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <http.port>${liberty.var.default.http.port}</http.port>
+                        <pact.provider.version>${project.version}</pact.provider.version>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
