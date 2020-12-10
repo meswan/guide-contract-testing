@@ -1,0 +1,200 @@
+// Copyright (c) 2018, 2020 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:projectid: contract-testing
+:page-layout: guide-multipane
+:page-duration: 25 minutes
+:page-releasedate:
+:page-guide-category: microprofile
+:page-essential: true
+:page-essential-order: 4
+:page-description: Learn how to implement contract testing to ensure compatibility for Java microservices and Cloud-native applications.
+:page-seo-title: Implementing consumer driven contract testing for Java microservices and Cloud-native applications.
+:page-seo-description: A getting started tutorial on implementing consumer driven contract testing for Java microservices and Cloud-native applications.
+:guide-author: Open Liberty
+:page-tags: ['MicroProfile', 'Java EE', 'Jakarta EE', 'Contract Testing', 'Consumer Driven Test']
+:page-related-guides: ['microshed-testing', 'reactive-service-testing', 'arquillian-managed']
+:page-permalink: /guides/{projectid}
+:repo-description: Visit the https://openliberty.io/guides/{projectid}.html[website] for the rendered version of the guide.
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+= Testing with Consumer Driven Contracts
+
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
+Learn how to test Java microservices with Consumer Driven Contracts in Open Liberty.
+
+== What you'll learn
+
+The two microservices you will interact with are called system and inventory. The system microservice returns the JVM
+system properties of its host. The inventory microservice retrieves specific properties from the system microservice. You will
+learn how to use the https://docs.pact.io/[Pact^] framework to write contracts for the inventory application that will be verified by
+the system application.
+
+=== What is Contract Testing?
+
+Contract testing is a methodology for testing an integration point by isolating each application and checking if the
+messages it transmits conform to a shared understanding that is documented in a contract. It ensures that services can communicate with each other.
+
+=== What is Pact?
+Pact is an open source contract testing tool. It is a code-first tool for testing HTTP and message integrations using contract tests.
+
+=== What is Pact Broker?
+The pact broker is an application for sharing pact contracts and verification results, and is an important piece for integrating pact into CI/CD pipelines.
+
+== Additional prerequisites
+
+Before you begin, Docker needs to be installed. For installation instructions, refer to the https://docs.docker.com/get-docker/[official Docker documentation^]. You will deploy the pact broker application in a Docker container.
+
+Make sure to start your Docker daemon before you proceed.
+
+[role="command"]
+include::{common-includes}/gitclone.adoc[]
+
+Next, start pact broker:
+[role='command']
+```
+docker-compose -f "pact-broker/docker-compose.yml" up -d --build
+```
+
+Once the pact broker application is running, you will see:
+[role="no_copy"]
+```
+Creating pact-broker_postgres_1 ... done
+Creating pact-broker_pact-broker_1 ... done
+```
+
+Navigate to http://localhost:9292/[^] to confirm that you can view the Pact Broker application's UI.
+
+You can refer to the https://docs.pact.io/pact_broker/docker_images/pactfoundation[official Pact Broker documentation^]
+for more information about the components of the docker compose file.
+
+== Implementing Pact in Inventory Application
+Navigate to the `start` directory to begin.
+
+You can find the starting Java projects in the `start` directory. It is made up of the `system` and `inventory` microservices.
+Each microservice lives in its own corresponding directory, `system` and `inventory`.
+
+Navigate to the `inventory` directory.
+
+[role=command]
+include::{common-includes}/devmode-lmp33-start.adoc[]
+
+inventory/pom.xml
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/inventory/pom.xml[]
+----
+
+InventoryPactIT.java
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java[]
+----
+
+The pact framework provides a [hotspot=pactPlugin file=0]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=0]`location` at which the pact file will be stored. The [hotspot=pactJunit file=0]`pact-jvm-consumer-junit`
+dependency provides the base test class for use with Junit to build the unit tests.
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Replace the inventory pom file.#
+`inventory/pom.xml`
+----
+
+The `InventoryPactIT` class contains a [hotspot=mockprovider file=2]`mock provider` that mimics the HTTP responses from the system microservice.
+The `@Pact` annotation takes the name of the microservice as a parameter. This is useful when testing multiple microservices.
+
+The [hotspot=builder file=2]`RequestResponsePact` method defines the minimal expected response for a specific endpoint also known as an interaction.
+For each interaction, the expected request and the response are registered with the mock service using the `@PactVerification` annotation.
+
+The [hotspot=mockTest file=2]`test` sends a real request to the mock provider. The mock provider compares the actual request with the expected request and confirms if the comparison is successful.
+Finally, the [hotspot=unitTest file=2]`unit test` confirms that the response is correct.
+
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Create the InventoryPactIT.java file.#
+`inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java
+----
+After you replace the `pom.xml` and create the `InventoryPactIT.java` file, Open Liberty automatically reloads its configuration.
+
+A contract between inventory and system is called a pact. Each pact is a collection of interactions that have been defined in the `InventoryPactIT` class.
+
+Press the `enter/return` key to run the tests and generate the pact file.
+
+When integrating pact in a CI/CD pipeline, the `mvn verify` goal can be used instead to generate the pact file.
+
+The generated pact file is named `Inventory-System.json` and is located in `inventory/target/pacts`. It contains the defined interactions in `.json` format:
+
+[source,json,role="no_copy"]
+----
+{
+...
+"interactions": [
+{
+      "description": "a request for os encoding entity",
+      "request": {
+        "method": "GET",
+        "path": "/system/properties/key/os.encoding"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "os.encoding": "UTF-8"
+          }
+        ]
+      },
+      "providerStates": [
+        {
+          "name": "os.encoding is UTF-8"
+        }
+      ]
+    }
+...
+  ]
+}
+----
+
+Now that the pact file has been generated, open a new terminal to publish it to the pact broker using:
+[role='command']
+```
+mvn pact:publish
+```
+
+When completed, you should see:
+[role="no_copy"]
+```
+[INFO] --- maven:4.1.0:publish (default-cli) @ inventory ---
+Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
+```
+
+== Verifying Contracts in Pact Broker
+
+Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry has been added. Note that there is no
+timestamp in the `Last verified` column as the pact has not been verified by the system microservice yet.
+
+== Implementing Pact in System Application
+
+== Verifying the Contract
+
+== Tearing down the environment
+
+== Great work! You're done!
+
+You have implemented contract testing using pact in microservices and verified the contract using the pact broker.
+
+== Related Links
+
+Learn more about the Pact framework.
+
+https://pact.io/[View the Pact website^]
+
+include::{common-includes}/attribution.adoc[subs="attributes"]
