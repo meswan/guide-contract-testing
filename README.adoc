@@ -31,20 +31,30 @@ Learn how to test Java microservices with Consumer Driven Contracts in Open Libe
 
 == What you'll learn
 
+With microservices-based architecture, there is a need for robust testing to ensure that microservices that are dependent on one another are able to communicate effectively.
+Typically, to prevent multiple points of failures at different integration points, a combination of unit, integration, and end-2-end tests are used.
+While unit tests are fast, they are less trustworthy as they run in isolation and usually relies on mock data.
+
+Integration tests address this by testing against real running services. However, they tend to be slow as the tests depend on other microservices and are less reliable as they are prone to changes beyond its control.
+
+Usually, end-to-end tests tend to be more trustworthy as it verifies functionality from the perspective of a user. Nevertheless, it also comes with its challenges; there is usually a GUI component that
+is required to perform end-to-end tests and relies on 3rd party software such as Selenium which requires heavy compute time and resources.
+
+Contract testing can be used in order to bridge the gap among the shortcomings of those testing methodologies. Contract testing is a technique for testing an integration point by isolating each application and checking if the
+HTTP requests and responses it transmits conform to a shared understanding that is documented in a contract.
+It ensures that microservices can communicate with each other.
+
 The two microservices you will interact with are called system and inventory. The system microservice returns the JVM
 system properties of its host. The inventory microservice retrieves specific properties from the system microservice. You will
 learn how to use the https://docs.pact.io/[Pact^] framework to write contracts for the inventory application that will be verified by
 the system application.
 
-=== What is Contract Testing?
-
-Contract testing is a methodology for testing an integration point by isolating each application and checking if the
-messages it transmits conform to a shared understanding that is documented in a contract. It ensures that services can communicate with each other.
-
 === What is Pact?
+
 Pact is an open source contract testing tool. It is a code-first tool for testing HTTP and message integrations using contract tests.
 
 === What is Pact Broker?
+
 The pact broker is an application for sharing pact contracts and verification results, and is an important piece for integrating pact into CI/CD pipelines.
 
 == Additional prerequisites
@@ -75,6 +85,7 @@ You can refer to the https://docs.pact.io/pact_broker/docker_images/pactfoundati
 for more information about the components of the docker compose file.
 
 == Implementing Pact in Inventory Application
+
 Navigate to the `start` directory to begin.
 
 You can find the starting Java projects in the `start` directory. It is made up of the `system` and `inventory` microservices.
@@ -130,7 +141,7 @@ When integrating pact in a CI/CD pipeline, the `mvn verify` goal can be used ins
 
 The generated pact file is named `Inventory-System.json` and is located in `inventory/target/pacts`. It contains the defined interactions in `.json` format:
 
-[source,json,role="no_copy"]
+[role="no_copy"]
 ----
 {
 ...
@@ -181,7 +192,41 @@ Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
 Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry has been added. Note that there is no
 timestamp in the `Last verified` column as the pact has not been verified by the system microservice yet.
 
+You can also visit the http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[interactions^] URL for more insights about each interaction that has been created.
+
+A snippet of the page looks similar to:
+```
+A pact between Inventory and System
+Requests from Inventory to System
+A request for os encoding entity given os.encoding is UTF-8
+
+A request for the version given version is 1.1
+
+A request to check for the default directory given default directory is true
+
+Interactions
+Given os.encoding is UTF-8, upon receiving a request for os encoding entity from Inventory, with
+
+{
+  "method": "GET",
+  "path": "/system/properties/key/os.encoding"
+}
+System will respond with:
+
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": [
+    {
+      "os.encoding": "UTF-8"
+    }
+  ]
+}
+```
 == Implementing Pact in System Application
+
 system/pom.xml
 [source, java, linenums, role='code_column hide_tags=copyright']
 ----
@@ -228,6 +273,7 @@ The `@State` annotation must match the `.given()` parameter that was provided by
 After you create the `SystemBrokerIT.java` file, Open Liberty automatically reloads its configuration.
 
 == Verifying the Contract
+
 Press the `enter/return` key to run the tests to verify the pact file. When integrating pact in a CI/CD pipeline, the `mvn test` goal can be used instead to verify the pact file from the pact broker.
 
 ```
@@ -252,6 +298,7 @@ Once you see something similar to the above, refresh the http://localhost:9292/[
 The pact file created by the inventory microservice has been successfully verified by the system microservice. This ensures that responses from the system microservice actually meets the expectation of the inventory microservice.
 
 == Tearing down the environment
+
 [role=command]
 include::{common-includes}/devmode-quit.adoc[]
 
