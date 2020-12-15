@@ -10,7 +10,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 // end::copyright[]
-package it.io.openliberty.sample.system;
+package it.io.openliberty.guides.system;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
@@ -27,24 +27,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @Provider("System")
 @Consumer("Inventory")
+// tag::connectionInfo[]
 @PactBroker(
         host = "localhost",
         port = "9292",
         consumerVersionSelectors = {
                 @VersionSelector(tag = "open-liberty-pact")
         })
+// end::connectionInfo[]
 public class SystemBrokerIT {
+  // tag::invocation[]
   @TestTemplate
   @ExtendWith(PactVerificationInvocationContextProvider.class)
   void pactVerificationTestTemplate(PactVerificationContext context) {
     context.verifyInteraction();
   }
-
+  // end::invocation[]
   @BeforeAll
+  // tag::publish[]
   static void enablePublishingPact() {
     System.setProperty("pact.verifier.publishResults", "true");
   }
-
+  // end::publish[]
   @BeforeEach
   void before(PactVerificationContext context) {
     int port = Integer.parseInt(System.getProperty("http.port"));

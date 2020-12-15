@@ -29,11 +29,13 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
+        <!-- tag::pactDependency[] -->
         <dependency>
             <groupId>au.com.dius.pact.provider</groupId>
             <artifactId>junit5</artifactId>
             <version>4.1.7</version>
         </dependency>
+        <!-- end::pactDependency[] -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>

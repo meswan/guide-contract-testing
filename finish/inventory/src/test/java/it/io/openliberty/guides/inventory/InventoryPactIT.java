@@ -11,7 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 
-package io.openliberty.guides.inventory;
+package it.io.openliberty.guides.inventory;
 
 import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;

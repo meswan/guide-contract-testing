@@ -94,7 +94,7 @@ include::finish/inventory/pom.xml[]
 InventoryPactIT.java
 [source, java, linenums, role='code_column hide_tags=copyright']
 ----
-include::finish/inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java[]
+include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
 ----
 
 The pact framework provides a [hotspot=pactPlugin file=0]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=0]`location` at which the pact file will be stored. The [hotspot=pactJunit file=0]`pact-jvm-consumer-junit`
@@ -176,16 +176,92 @@ When completed, you should see:
 Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
 ```
 
-== Verifying Contracts in Pact Broker
+== Verifying the Pact in Pact Broker
 
 Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry has been added. Note that there is no
 timestamp in the `Last verified` column as the pact has not been verified by the system microservice yet.
 
 == Implementing Pact in System Application
+system/pom.xml
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/system/pom.xml[]
+----
+
+SystemBrokerIT.java
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/system/src/test/java/it/io/openliberty/guides/system/SystemBrokerIT.java[]
+----
+
+Navigate to the `system` directory.
+
+Open another command-line session to start Open Liberty in dev mode for the system microservice:
+[role=command]
+```
+mvn liberty:dev
+```
+
+After you see the following message, your application server in dev mode is ready:
+
+[role="no_copy"]
+----
+************************************************************************
+*    Liberty is running in dev mode.
+----
+
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Create the SystemBrokerIT.java file.#
+`system/src/test/java/it/io/openliberty/guides/system/SystemBrokerIT.java`
+----
+
+[hotspot=pactDependency file=0]`Junit5 pact provider` dependency is used for the system microservice to connect to the pact broker to verify the pact file.
+The connection information for the pact broker is provided with the [hotspot=connectionInfo file=1]`@PactBroker` annotation. The dependency also provides a [hotspot=invocation file=1]`JUnit5 Invocation Context Provider` to write pact verification tests that is used with the `@TestTemplate` annotation. This generates a test for each of the interactions.
+
+A system property is set to true for [hotspot=publish file=1]`pact.verifier.publishResults` so that the results are sent to the pact broker after the tests are completed.
+
+The test target is defined on the `PactVerificationContext` to point to the running endpoint of the system microservice.
+
+The `@State` annotation must match the `.given()` parameter that was provided by the inventory test class.
+
+After you create the `SystemBrokerIT.java` file, Open Liberty automatically reloads its configuration.
 
 == Verifying the Contract
+Press the `enter/return` key to run the tests to verify the pact file. When integrating pact in a CI/CD pipeline, the `mvn test` goal can be used instead to verify the pact file from the pact broker.
+
+```
+...
+Verifying a pact between Pact between Inventory (1.0-SNAPSHOT) and System
+
+  Notices:
+    1) The pact at http://localhost:9292/pacts/provider/System/consumer/Inventory/pact-version/XXX is being verified because it matches the following configured selection criterion: latest pact for a consumer version tagged 'open-liberty-pact'
+
+  [from Pact Broker http://localhost:9292/pacts/provider/System/consumer/Inventory/pact-version/XXX]
+  Given version is 1.1
+  a request for the version
+    returns a response which
+      has status code 200 (OK)
+      has a matching body (OK)
+[main] INFO au.com.dius.pact.provider.DefaultVerificationReporter - Published verification result of 'au.com.dius.pact.core.pactbroker.TestResult$Ok@4d84dfe7' for consumer 'Consumer(name=Inventory)'
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.835 s - in it.io.openliberty.guides.system.SystemBrokerIT
+...
+```
+Once you see something similar to the above, refresh the http://localhost:9292/[pact broker webpage^] to confirm that there is now a timestamp in the `Last verified` column.
+
+The pact file created by the inventory microservice has been successfully verified by the system microservice. This ensures that responses from the system microservice actually meets the expectation of the inventory microservice.
 
 == Tearing down the environment
+[role=command]
+include::{common-includes}/devmode-quit.adoc[]
+
+[role='command']
+```
+docker-compose -f "pact-broker/docker-compose.yml" down
+docker rmi postgres:12
+docker rmi pactfoundation/pact-broker:2.62.0.0
+docker volume rm pact-broker_postgres-volume
+```
 
 == Great work! You're done!
 
