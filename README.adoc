@@ -9,7 +9,7 @@
 :projectid: contract-testing
 :page-layout: guide-multipane
 :page-duration: 25 minutes
-:page-releasedate:
+:page-releasedate: 2020-12-16
 :page-guide-category: microprofile
 :page-essential: true
 :page-essential-order: 4
