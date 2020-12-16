@@ -49,11 +49,11 @@ system properties of its host. The inventory microservice retrieves specific pro
 learn how to use the https://docs.pact.io/[Pact^] framework to write contracts for the inventory application that will be verified by
 the system application.
 
-=== What is Pact?
+*Pact*
 
-Pact is an open source contract testing tool. It is a code-first tool for testing HTTP and message integrations using contract tests.
+Pact is an open source contract testing tool for testing HTTP requests, responses and message integrations using contract tests.
 
-=== What is Pact Broker?
+*Pact Broker*
 
 The pact broker is an application for sharing pact contracts and verification results, and is an important piece for integrating pact into CI/CD pipelines.
 
