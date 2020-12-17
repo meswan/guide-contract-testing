@@ -193,6 +193,7 @@ timestamp in the `Last verified` column as the pact is yet to be verified by the
 You can also see the http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[interactions^] URL for more insights about each interaction that was created.
 
 A snippet of the interaction page looks similar to:
+[role="no_copy"]
 ```
 A pact between Inventory and System
 Requests from Inventory to System
