@@ -32,15 +32,15 @@ Learn how to test Java microservices with consumer driven contracts in Open Libe
 == What you'll learn
 
 With microservices-based architecture, there is a need for robust testing to ensure that microservices that depend on one another are able to communicate effectively.
-Typically, to prevent multiple points of failures at different integration points, a combination of unit, integration, and end-2-end tests are used.
-While unit tests are fast, they are less trustworthy as they run in isolation and usually relies on mock data.
+Typically, to prevent multiple points of failures at different integration points, a combination of unit, integration, and end-to-end tests are used.
+While unit tests are fast, they are less trustworthy as they run in isolation and usually rely on mock data.
 
 Integration tests address this issue by testing against real running services. However, they tend to be slow as the tests depend on other microservices and are less reliable as they are prone to external changes.
 
 Usually, end-to-end tests tend to be more trustworthy as they verify functionality from the perspective of a user. A GUI component
-is required to perform end-to-end tests that rely on third-party software such as Selenium, which requires heavy compute time and resources.
+is required to perform end-to-end tests that rely on third-party software such as Selenium that requires heavy compute time and resources.
 
-Contract testing can be used to bridge the gap among the shortcomings of those testing methodologies. Contract testing is a technique for testing an integration point by isolating each application and checking if the
+Contract testing bridges the gap among the shortcomings of those testing methodologies. Contract testing is a technique for testing an integration point by isolating each application and checking if the
 HTTP requests and responses it transmits conform to a shared understanding that is documented in a contract.
 It ensures that microservices can communicate with each other.
 
@@ -84,7 +84,7 @@ Go to http://localhost:9292/[^] to confirm that you can access the pact broker's
 You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[Pact Broker^]
 documentation for more information about the components of the docker compose file.
 
-== Implementing pact in Inventory Application
+== Implementing pact in inventory application
 
 Navigate to the `start` directory to begin.
 
@@ -187,7 +187,7 @@ When completed, you will see something similar to:
 Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
 ```
 
-== Verifying the Pact in Pact Broker
+== Verifying the pact in pact broker
 
 Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry was added. Note there is no
 timestamp in the `Last verified` column as the pact is yet to be verified by the system microservice yet.
@@ -225,7 +225,7 @@ System will respond with:
   ]
 }
 ```
-== Implementing Pact in System Application
+== Implementing pact in system application
 
 system/pom.xml
 [source, xml, linenums, role='code_column hide_tags=copyright']
@@ -279,7 +279,7 @@ The [hotspot=state file=1]`@State` annotation must match the `.given()` paramete
 
 After you create the `SystemBrokerIT.java` and replace the `pom.xml` file, Open Liberty automatically reloads its configuration.
 
-== Verifying the Contract
+== Verifying the contract
 
 Press the `enter/return` key to run the tests to verify the pact file. When integrating pact in a CI/CD pipeline, the `mvn test` goal can be used instead to verify the pact file from the pact broker.
 
