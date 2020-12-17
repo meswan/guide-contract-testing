@@ -11,8 +11,7 @@
 :page-duration: 25 minutes
 :page-releasedate: 2020-12-16
 :page-guide-category: microprofile
-:page-essential: true
-:page-essential-order: 4
+:page-essential: false
 :page-description: Learn how to implement contract testing to ensure compatibility for Java microservices and Cloud-native applications.
 :page-seo-title: Implementing consumer driven contract testing for Java microservices and Cloud-native applications.
 :page-seo-description: A getting started tutorial on implementing consumer driven contract testing for Java microservices and Cloud-native applications.
@@ -22,6 +21,7 @@
 :page-permalink: /guides/{projectid}
 :repo-description: Visit the https://openliberty.io/guides/{projectid}.html[website] for the rendered version of the guide.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:source-highlighter: prettify
 = Testing with Consumer Driven Contracts
 
 [.hidden]
@@ -108,10 +108,10 @@ InventoryPactIT.java
 include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
 ----
 
-The pact framework provides a [hotspot=pactPlugin file=1]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=1]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=1]`location` at which the pact file will be stored.
+The pact framework provides a [hotspot=pactPlugin file=1]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=1]`location` at which the pact file will be stored.
 The [hotspot=pactJunit file=1]`pact-jvm-consumer-junit` dependency provides the base test class for use with Junit to build the unit tests.
 
-[role="code_command hotspot", subs="quotes"]
+[role="code_command hotspot file=1", subs="quotes"]
 ----
 #Replace the inventory pom file.#
 `inventory/pom.xml`
@@ -129,7 +129,7 @@ Finally, the [hotspot=unitTest file=2]`unit test` confirms that the response is 
 [role="code_command hotspot file=2", subs="quotes"]
 ----
 #Create the InventoryPactIT.java file.#
-`inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java
+`inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java`
 ----
 After you replace the `pom.xml` and create the `InventoryPactIT.java` file, Open Liberty automatically reloads its configuration.
 
