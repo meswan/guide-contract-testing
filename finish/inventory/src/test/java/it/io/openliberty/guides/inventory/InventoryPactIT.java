@@ -33,7 +33,9 @@ public class InventoryPactIT {
     @Rule
     public PactProviderRule mockProvider = new PactProviderRule("System", this);
     // end::mockprovider[]
+    // tag::pact[]
     @Pact(consumer = "Inventory")
+    // tag::pact[]
     public RequestResponsePact createPactEncoding(PactDslWithProvider builder) {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
@@ -89,7 +91,9 @@ public class InventoryPactIT {
     }
 
     @Test
+    // tag::verification[]
     @PactVerification(value = "System", fragment = "createPactEncoding")
+    // end::verification[]
     public void runEncodingTest() {
         // tag::mockTest[]
         String encoding = new Inventory(mockProvider.getUrl()).getEncoding();

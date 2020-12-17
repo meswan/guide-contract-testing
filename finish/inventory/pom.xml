@@ -72,7 +72,7 @@
                         </serviceProvider>
                     </serviceProviders>
                     <projectVersion>${project.version}</projectVersion>
-                    <skipPactPublish>false</skipPactPublish> <!-- Defaults to false -->
+                    <skipPactPublish>false</skipPactPublish>
                     <pactBrokerUrl>http://localhost:9292</pactBrokerUrl>
                     <tags>
                         <tag>open-liberty-pact</tag>

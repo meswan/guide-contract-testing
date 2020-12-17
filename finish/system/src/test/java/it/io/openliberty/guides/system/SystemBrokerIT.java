@@ -39,9 +39,11 @@ public class SystemBrokerIT {
   // tag::invocation[]
   @TestTemplate
   @ExtendWith(PactVerificationInvocationContextProvider.class)
+  // tag::context[]
   void pactVerificationTestTemplate(PactVerificationContext context) {
     context.verifyInteraction();
   }
+  // end::context[]
   // end::invocation[]
   @BeforeAll
   // tag::publish[]
@@ -55,7 +57,9 @@ public class SystemBrokerIT {
     context.setTarget(new HttpTestTarget("localhost", port));
   }
 
+  // tag::state[]
   @State("os.encoding is UTF-8")
+  // end::state[]
   public void validEncoding() {
   }
 
