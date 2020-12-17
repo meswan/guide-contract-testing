@@ -53,7 +53,7 @@ the system application.
 
 Pact is an open source contract testing tool for testing HTTP requests, responses and message integrations using contract tests.
 
-*Pact Broker*
+*Pact broker*
 
 The pact broker is an application for sharing pact contracts and verification results, and is an important piece for integrating pact into CI/CD pipelines.
 
@@ -81,10 +81,10 @@ Creating pact-broker_pact-broker_1 ... done
 
 Navigate to http://localhost:9292/[^] to confirm that you can access the pact broker's UI.
 
-You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[Pact Broker^]
+You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[pact Broker^]
 documentation for more information about the components of the docker compose file.
 
-== Implementing Pact in Inventory Application
+== Implementing pact in Inventory Application
 
 Navigate to the `start` directory to begin.
 
@@ -194,7 +194,7 @@ timestamp in the `Last verified` column as the pact has not been verified by the
 
 You can also visit the http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[interactions^] URL for more insights about each interaction that has been created.
 
-A snippet of the interaction page looks similar to:
+A snippet of the interaction page should look similar to:
 ```
 A pact between Inventory and System
 Requests from Inventory to System
@@ -285,7 +285,7 @@ Press the `enter/return` key to run the tests to verify the pact file. When inte
 
 ```
 ...
-Verifying a pact between Pact between Inventory (1.0-SNAPSHOT) and System
+Verifying a pact between pact between Inventory (1.0-SNAPSHOT) and System
 
   Notices:
     1) The pact at http://localhost:9292/pacts/provider/System/consumer/Inventory/pact-version/XXX is being verified because it matches the following configured selection criterion: latest pact for a consumer version tagged 'open-liberty-pact'
@@ -323,7 +323,7 @@ You have implemented contract testing using pact in microservices and verified t
 
 == Related Links
 
-Learn more about the Pact framework.
+Learn more about the pact framework.
 
 https://pact.io/[View the Pact website^]
 
