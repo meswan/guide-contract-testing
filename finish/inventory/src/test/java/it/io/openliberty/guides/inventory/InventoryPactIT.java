@@ -35,13 +35,15 @@ public class InventoryPactIT {
     // end::mockprovider[]
     // tag::pact[]
     @Pact(consumer = "Inventory")
-    // tag::pact[]
+    // end::pact[]
     public RequestResponsePact createPactEncoding(PactDslWithProvider builder) {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
         // tag::builder[]
         return builder
+                // tag::given[]
                 .given("os.encoding is UTF-8")
+                // end::given[]
                 .uponReceiving("a request for os encoding entity")
                 .path("/system/properties/key/os.encoding")
                 .method("GET")

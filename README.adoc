@@ -133,7 +133,7 @@ Finally, the [hotspot=unitTest file=1]`unit test` confirms that the response is 
 ----
 After you create `InventoryPactIT.java` and replace the `pom.xml` file, Open Liberty automatically reloads its configuration.
 
-A contract between inventory and system microservice is known as a pact. Each pact is a collection of interactions that were defined in the `InventoryPactIT` class.
+A contract between inventory and system microservice is known as a pact. Each pact is a collection of interactions that are defined in the `InventoryPactIT` class.
 
 Press the `enter/return` key to run the tests and generate the pact file.
 
@@ -190,7 +190,7 @@ Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
 == Verifying the pact in pact broker
 
 Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry was added. Note there is no
-timestamp in the `Last verified` column as the pact is yet to be verified by the system microservice yet.
+timestamp in the `Last verified` column as the pact is yet to be verified by the system microservice.
 
 You can also see the http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[interactions^] URL for more insights about each interaction that was created.
 
@@ -269,7 +269,13 @@ A system property is set to true for [hotspot=publish file=1]`pact.verifier.publ
 
 The test target is defined in the [hotspot=context file=1]`PactVerificationContext` to point to the running endpoint of the system microservice.
 
-The [hotspot=state file=1]`@State` annotation must match the `.given()` parameter that was provided in the inventory test class so that pact can identify which test case to run against.
+InventoryPactIT.java
+[source, java, linenums, role="code_column hide_tags=copyright"]
+----
+include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
+----
+
+The [hotspot=state file=1]`@State` annotation must match the [hotspot=given file=2]`.given()` parameter that was provided in the inventory test class so that pact can identify which test case to run against.
 
 [role="code_command hotspot file=1", subs="quotes"]
 ----
