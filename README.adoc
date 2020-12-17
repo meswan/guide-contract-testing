@@ -97,13 +97,13 @@ Navigate to the `inventory` directory.
 include::{common-includes}/devmode-lmp33-start.adoc[]
 
 inventory/pom.xml
-[source, xml, linenums, role='code_column']
+[source, xml, linenums, role="code_column"]
 ----
 include::finish/inventory/pom.xml[]
 ----
 
 InventoryPactIT.java
-[source, java, linenums, role='code_column hide_tags=copyright']
+[source, java, linenums, role="code_column hide_tags=copyright"]
 ----
 include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
 ----
