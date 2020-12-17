@@ -275,7 +275,7 @@ InventoryPactIT.java
 include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
 ----
 
-The [hotspot=state file=1]`@State` annotation must match the [hotspot=given file=2]`.given()` parameter that was provided in the inventory test class so that pact can identify which test case to run against.
+The [hotspot=state file=1]`@State` annotation must match the [hotspot=given file=2]`.given()` parameter that was provided in the inventory test class so that pact can identify which test case to run against which endpoint.
 
 [role="code_command hotspot file=1", subs="quotes"]
 ----
@@ -316,6 +316,7 @@ This ensures that responses from the system microservice meet the expectation of
 [role=command]
 include::{common-includes}/devmode-quit.adoc[]
 
+Run the following commands to remove the pact broker application.
 [role='command']
 ```
 docker-compose -f "pact-broker/docker-compose.yml" down
