@@ -108,25 +108,25 @@ InventoryPactIT.java
 include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
 ----
 
-The pact framework provides a [hotspot=pactPlugin file=1]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=1]`location` at which the pact file will be stored.
-The [hotspot=pactJunit file=1]`pact-jvm-consumer-junit` dependency provides the base test class for use with Junit to build the unit tests.
+The pact framework provides a [hotspot=pactPlugin file=0]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=0]`location` at which the pact file will be stored.
+The [hotspot=pactJunit file=0]`pact-jvm-consumer-junit` dependency provides the base test class for use with Junit to build the unit tests.
 
-[role="code_command hotspot file=1", subs="quotes"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the inventory pom file.#
 `inventory/pom.xml`
 ----
 
-The `InventoryPactIT` class contains a [hotspot=mockprovider file=2]`mock provider` that mimics the HTTP responses from the system microservice.
+The `InventoryPactIT` class contains a [hotspot=mockprovider file=1]`mock provider` that mimics the HTTP responses from the system microservice.
 The `@Pact` annotation takes the name of the microservice as a parameter. This is useful when testing multiple microservices.
 
-The [hotspot=builder file=2]`RequestResponsePact` method defines the minimal expected response for a specific endpoint also known as an interaction.
+The [hotspot=builder file=1]`RequestResponsePact` method defines the minimal expected response for a specific endpoint also known as an interaction.
 For each interaction, the expected request and the response are registered with the mock service using the `@PactVerification` annotation.
 
-The [hotspot=mockTest file=2]`test` sends a real request to the mock provider. The mock provider compares the actual request with the expected request and confirms if the comparison is successful.
-Finally, the [hotspot=unitTest file=2]`unit test` confirms that the response is correct.
+The [hotspot=mockTest file=1]`test` sends a real request to the mock provider. The mock provider compares the actual request with the expected request and confirms if the comparison is successful.
+Finally, the [hotspot=unitTest file=1]`unit test` confirms that the response is correct.
 
-[role="code_command hotspot file=2", subs="quotes"]
+[role="code_command hotspot file=1", subs="quotes"]
 ----
 #Create the InventoryPactIT.java file.#
 `inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java`
