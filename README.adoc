@@ -288,6 +288,7 @@ After you create the `SystemBrokerIT.java` and replace the `pom.xml` file, Open 
 
 Press the `enter/return` key to run the tests to verify the pact file. When integrating pact in a CI/CD pipeline, the `mvn test` goal can be used instead to verify the pact file from the pact broker.
 
+[role="no_copy"]
 ```
 ...
 Verifying a pact between pact between Inventory (1.0-SNAPSHOT) and System
