@@ -31,27 +31,27 @@ Learn how to test Java microservices with consumer driven contracts in Open Libe
 
 == What you'll learn
 
-With microservices-based architecture, there is a need for robust testing to ensure that microservices that are dependent on one another are able to communicate effectively.
+With microservices-based architecture, there is a need for robust testing to ensure that microservices that depend on one another are able to communicate effectively.
 Typically, to prevent multiple points of failures at different integration points, a combination of unit, integration, and end-2-end tests are used.
 While unit tests are fast, they are less trustworthy as they run in isolation and usually relies on mock data.
 
-Integration tests address this by testing against real running services. However, they tend to be slow as the tests depend on other microservices and are less reliable as they are prone to changes beyond its control.
+Integration tests address this issue by testing against real running services. However, they tend to be slow as the tests depend on other microservices and are less reliable as they are prone to external changes.
 
-Usually, end-to-end tests tend to be more trustworthy as it verifies functionality from the perspective of a user. Nevertheless, it also comes with its challenges; there is usually a GUI component that
-is required to perform end-to-end tests and relies on 3rd party software such as Selenium which requires heavy compute time and resources.
+Usually, end-to-end tests tend to be more trustworthy as they verify functionality from the perspective of a user. A GUI component
+is required to perform end-to-end tests that rely on third-party software such as Selenium, which requires heavy compute time and resources.
 
-Contract testing can be used in order to bridge the gap among the shortcomings of those testing methodologies. Contract testing is a technique for testing an integration point by isolating each application and checking if the
+Contract testing can be used to bridge the gap among the shortcomings of those testing methodologies. Contract testing is a technique for testing an integration point by isolating each application and checking if the
 HTTP requests and responses it transmits conform to a shared understanding that is documented in a contract.
 It ensures that microservices can communicate with each other.
 
 The two microservices you will interact with are called system and inventory. The system microservice returns the JVM
 system properties of its host. The inventory microservice retrieves specific properties from the system microservice. You will
-learn how to use the https://docs.pact.io/[Pact^] framework to write contracts for the inventory application that will be verified by
+learn how to use the https://docs.pact.io/[Pact^] framework to write contract tests for the inventory application to be verified by
 the system application.
 
 *Pact*
 
-Pact is an open source contract testing tool for testing HTTP requests, responses and message integrations using contract tests.
+Pact is an open source contract testing tool for testing HTTP requests, responses and, message integrations by using contract tests.
 
 *Pact broker*
 
@@ -72,16 +72,16 @@ Next, start pact broker:
 docker-compose -f "pact-broker/docker-compose.yml" up -d --build
 ```
 
-Once the pact broker application is running, you will see:
+When the pact broker application is running, you will see:
 [role="no_copy"]
 ```
 Creating pact-broker_postgres_1 ... done
 Creating pact-broker_pact-broker_1 ... done
 ```
 
-Navigate to http://localhost:9292/[^] to confirm that you can access the pact broker's UI.
+Go to http://localhost:9292/[^] to confirm that you can access the pact broker's UI.
 
-You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[pact Broker^]
+You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[Pact Broker^]
 documentation for more information about the components of the docker compose file.
 
 == Implementing pact in Inventory Application
@@ -108,8 +108,8 @@ InventoryPactIT.java
 include::finish/inventory/src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java[]
 ----
 
-The pact framework provides a [hotspot=pactPlugin file=0]`plugin` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=0]`location` at which the pact file will be stored.
-The [hotspot=pactJunit file=0]`pact-jvm-consumer-junit` dependency provides the base test class for use with Junit to build the unit tests.
+The pact framework provides an [hotspot=pactPlugin file=0]`extension` that can be added to the build section of the `pom.xml`. It contains the [hotspot=endpoint file=0]`endpoint` URL for the system microservice and the [hotspot=pactDirectory file=0]`location` at which the pact file is to be stored.
+The [hotspot=pactJunit file=0]`pact-jvm-consumer-junit` dependency provides the base test class for use with JUnit to build the unit tests.
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -118,10 +118,10 @@ The [hotspot=pactJunit file=0]`pact-jvm-consumer-junit` dependency provides the 
 ----
 
 The `InventoryPactIT` class contains a [hotspot=mockprovider file=1]`mock provider` that mimics the HTTP responses from the system microservice.
-The [hotspot=pact file=1]`@Pact` annotation takes the name of the microservice as a parameter. This makes it easy to differentiate microservices for one another when there are multiple applications.
+The [hotspot=pact file=1]`@Pact` annotation takes the name of the microservice as a parameter that makes it easier to differentiate microservices from one another when there are multiple applications.
 
 The [hotspot=builder file=1]`RequestResponsePact` method defines the minimal expected response for a specific endpoint and is also known as an interaction.
-For each interaction, the expected request and the response are registered with the mock service using the [hotspot=verification file=1]`@PactVerification` annotation.
+For each interaction, the expected request and the response are registered with the mock service by using the [hotspot=verification file=1]`@PactVerification` annotation.
 
 The test sends a real request to the [hotspot=mockTest file=1]`mock provider`. The mock provider compares the actual request with the expected request and confirms if the comparison is successful.
 Finally, the [hotspot=unitTest file=1]`unit test` confirms that the response is correct.
@@ -133,7 +133,7 @@ Finally, the [hotspot=unitTest file=1]`unit test` confirms that the response is 
 ----
 After you create `InventoryPactIT.java` and replace the `pom.xml` file, Open Liberty automatically reloads its configuration.
 
-A contract between inventory and system microservice is known as a pact. Each pact is a collection of interactions that have been defined in the `InventoryPactIT` class.
+A contract between inventory and system microservice is known as a pact. Each pact is a collection of interactions that were defined in the `InventoryPactIT` class.
 
 Press the `enter/return` key to run the tests and generate the pact file.
 
@@ -174,13 +174,13 @@ The generated pact file is named `Inventory-System.json` and is located in `inve
 }
 ----
 
-Now that the pact file has been generated, open a new terminal to publish it to the pact broker using:
+With the pact file generated, open a new terminal to publish it to the pact broker by using:
 [role='command']
 ```
 mvn pact:publish
 ```
 
-When completed, you should see:
+When completed, you will see something similar to:
 [role="no_copy"]
 ```
 [INFO] --- maven:4.1.0:publish (default-cli) @ inventory ---
@@ -189,12 +189,12 @@ Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
 
 == Verifying the Pact in Pact Broker
 
-Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry has been added. Note that there is no
-timestamp in the `Last verified` column as the pact has not been verified by the system microservice yet.
+Refresh the http://localhost:9292/[pact broker webpage^] to verify that a new entry was added. Note there is no
+timestamp in the `Last verified` column as the pact is yet to be verified by the system microservice yet.
 
-You can also visit the http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[interactions^] URL for more insights about each interaction that has been created.
+You can also see the http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[interactions^] URL for more insights about each interaction that was created.
 
-A snippet of the interaction page should look similar to:
+A snippet of the interaction page looks similar to:
 ```
 A pact between Inventory and System
 Requests from Inventory to System
@@ -263,7 +263,7 @@ After you see the following message, your application server in dev mode is read
 `system/pom.xml`
 ----
 
-The connection information for the pact broker is provided with the [hotspot=connectionInfo file=1]`@PactBroker` annotation. The dependency also provides a [hotspot=invocation file=1]`JUnit5 Invocation Context Provider` to write pact verification tests that is used with the `@TestTemplate` annotation. This generates a test for each of the interactions.
+The connection information for the pact broker is provided with the [hotspot=connectionInfo file=1]`@PactBroker` annotation. The dependency also provides a [hotspot=invocation file=1]`JUnit5 Invocation Context Provider` to write pact verification tests that are used with the `@TestTemplate` annotation to generate a test for each of the interactions.
 
 A system property is set to true for [hotspot=publish file=1]`pact.verifier.publishResults` so that the results are sent to the pact broker after the tests are completed.
 
@@ -300,9 +300,10 @@ Verifying a pact between pact between Inventory (1.0-SNAPSHOT) and System
 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.835 s - in it.io.openliberty.guides.system.SystemBrokerIT
 ...
 ```
-Once you see something similar to the above, refresh the http://localhost:9292/[pact broker webpage^] to confirm that there is now a timestamp in the `Last verified` column.
+When completed, refresh the http://localhost:9292/[pact broker webpage^] to confirm that there is now a timestamp in the `Last verified` column.
 
-The pact file created by the inventory microservice has been successfully verified by the system microservice through the pact broker application. This ensures that responses from the system microservice actually meets the expectation of the inventory microservice.
+The pact file that is created by the inventory microservice was successfully verified by the system microservice through the pact broker application.
+This ensures that responses from the system microservice meet the expectation of the inventory microservice.
 
 == Tearing down the environment
 
@@ -319,7 +320,7 @@ docker volume rm pact-broker_postgres-volume
 
 == Great work! You're done!
 
-You have implemented contract testing using pact in microservices and verified the contract using the pact broker.
+You implemented contract testing by using pact in microservices and verified the contract by using the pact broker.
 
 == Related Links
 
