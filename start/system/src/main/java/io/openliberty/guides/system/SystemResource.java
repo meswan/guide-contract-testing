@@ -10,7 +10,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 // end::copyright[]
-package io.openliberty.sample.system;
+package io.openliberty.guides.system;
 
 import javax.json.Json;
 import javax.json.JsonArray;

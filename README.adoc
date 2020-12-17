@@ -86,12 +86,10 @@ documentation for more information about the components of the docker compose fi
 
 == Implementing pact in inventory application
 
-Navigate to the `start` directory to begin.
+Navigate to the `start/inventory` directory to begin.
 
 You can find the starting Java projects in the `start` directory. It is made up of the `system` and `inventory` microservices.
 Each microservice lives in its own corresponding directory; `system` and `inventory`.
-
-Navigate to the `inventory` directory.
 
 [role=command]
 include::{common-includes}/devmode-lmp33-start.adoc[]
@@ -129,7 +127,7 @@ Finally, the [hotspot=unitTest file=1]`unit test` confirms that the response is 
 [role="code_command hotspot file=1", subs="quotes"]
 ----
 #Create the InventoryPactIT.java file.#
-`inventory/src/test/java/io/openliberty/guides/inventory/InventoryPactIT.java`
+`src/test/java/it/io/openliberty/guides/inventory/InventoryPactIT.java`
 ----
 After you create `InventoryPactIT.java` and replace the `pom.xml` file, Open Liberty automatically reloads its configuration.
 
@@ -174,7 +172,7 @@ The generated pact file is named `Inventory-System.json` and is located in `inve
 }
 ----
 
-With the pact file generated, open a new terminal to publish it to the pact broker by using:
+Open a new command-line session to publish the generated pact file to the pact broker by using:
 [role='command']
 ```
 mvn pact:publish
@@ -280,7 +278,7 @@ The [hotspot=state file=1]`@State` annotation must match the [hotspot=given file
 [role="code_command hotspot file=1", subs="quotes"]
 ----
 #Create the SystemBrokerIT.java file.#
-`system/src/test/java/it/io/openliberty/guides/system/SystemBrokerIT.java`
+`src/test/java/it/io/openliberty/guides/system/SystemBrokerIT.java`
 ----
 
 After you create the `SystemBrokerIT.java` and replace the `pom.xml` file, Open Liberty automatically reloads its configuration.
