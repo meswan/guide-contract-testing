@@ -87,7 +87,7 @@ Creating pact-broker_pact-broker_1 ... done
 
 Go to http://localhost:9292/[^] to confirm that you can access the pact broker's UI.
 
-image::assets/pact-broker-webpage.png[Pact broker application,align="center"]
+image::pact-broker-webpage.png[Pact broker application,align="center"]
 
 You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[Pact Broker^]
 documentation for more information about the components of the docker compose file.
@@ -212,40 +212,14 @@ Publishing 'Inventory-System.json' with tags 'open-liberty-pact' ... OK
 Refresh the pact broker URL at http://localhost:9292/[^] to verify that a new entry was added. Note there is no
 timestamp in the `Last verified` column as the pact is yet to be verified by the `system` microservice.
 
+image::pact-broker-webpage-refresh.png[Pact broker application,align="center"]
+
 You can also see the interactions URL at http://localhost:9292/pacts/provider/System/consumer/Inventory/latest[^] for more insights about each interaction that was created.
 
 A snippet of the interaction page looks similar to:
-[role="no_copy"]
-```
-A pact between Inventory and System
-Requests from Inventory to System
-A request for os encoding entity given os.encoding is UTF-8
 
-A request for the version given version is 1.1
+image::pact-broker-interactions.png[Pact broker application,align="center"]
 
-A request to check for the default directory given default directory is true
-
-Interactions
-Given os.encoding is UTF-8, upon receiving a request for os encoding entity from Inventory, with
-
-{
-  "method": "GET",
-  "path": "/system/properties/key/os.encoding"
-}
-System will respond with:
-
-{
-  "status": 200,
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "body": [
-    {
-      "os.encoding": "UTF-8"
-    }
-  ]
-}
-```
 == Implementing pact test in the system service
 
 SystemBrokerIT.java
@@ -330,6 +304,8 @@ Verifying a pact between pact between Inventory (1.0-SNAPSHOT) and System
 ...
 ```
 When completed, refresh the pact broker URL at http://localhost:9292/[^] to confirm that there is now a timestamp in the `Last verified` column.
+
+image::pact-broker-webpage-verified.png[Pact broker application,align="center"]
 
 The pact file that is created by the `inventory` microservice was successfully verified by the `system` microservice through the pact broker application.
 This ensures that responses from the `system` microservice meet the expectation of the `inventory` microservice.
