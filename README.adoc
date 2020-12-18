@@ -87,7 +87,7 @@ Creating pact-broker_pact-broker_1 ... done
 
 Go to http://localhost:9292/[^] to confirm that you can access the pact broker's UI.
 
-image::pact-broker-webpage.png[Pact broker application,align="center"]
+image::assets/pact-broker-webpage.png[Pact broker application,align="center"]
 
 You can refer to the official https://docs.pact.io/pact_broker/docker_images/pactfoundation[Pact Broker^]
 documentation for more information about the components of the docker compose file.
